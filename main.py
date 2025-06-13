@@ -15,14 +15,12 @@ logging.basicConfig(
 )
 
 def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    app = ApplicationBuilder().token(BOT_TOKEN).post_init(set_bot_commands).build()
     setup_handlers(app)
 
     logging.info("Bot started...")
 
     app.run_polling()
-       
-    set_bot_commands(app)
 
 if __name__ == "__main__":
     main()
