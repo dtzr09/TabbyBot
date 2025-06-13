@@ -5,6 +5,7 @@ from handlers.settings import *
 from handlers.stats import handle_stats, handle_group_stats
 from handlers.group_expenses import *
 from utils.utils import handle_cancel_callback
+from telegram import BotCommand, BotCommandScopeAllPrivateChats, BotCommandScopeAllGroupChats
 
 def setup_handlers(app):
     '''Private message handler'''
@@ -43,3 +44,28 @@ def setup_handlers(app):
     # Callbacks: 
     app.add_handler(CallbackQueryHandler(handle_group_expense_payer_selection, pattern="^payer:"))
     app.add_handler(CallbackQueryHandler(handle_group_category_callback, pattern=r"^group_cat:"))
+
+
+async def set_bot_commands(application):
+    # Commands for all private chats (default)
+    await application.bot.set_my_commands(
+        commands=[
+            BotCommand("start", "🚀 Kick things off!"),
+            BotCommand("stats", "📅 Peek at your group’s spending this month!"),
+            BotCommand("settings", "🛠️ Refine it. ✨ Rename it. 🔄 Recalibrate it."),
+        ],
+        scope=BotCommandScopeAllPrivateChats()
+    )
+
+    # Commands for a specific group chat (replace with your actual chat_id)
+    await application.bot.set_my_commands(
+        commands=[
+            BotCommand("start", "🚀 Kick things off and set up your group!"),
+            BotCommand("stats", "📅 Peek at your group’s spending this month!"),
+            BotCommand("settle", "💰 Clear your dues with the crew"),
+            BotCommand("addmembers", "🧾 Bring more people into the expense party"),
+            BotCommand("settings", "🛠️ Refine it. ✨ Rename it. 🔄 Recalibrate it."),
+
+        ],
+        scope=BotCommandScopeAllGroupChats()
+    )
